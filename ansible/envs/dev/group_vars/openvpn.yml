@@ -9,3 +9,8 @@ vpn_key_city: "Paris"
 vpn_key_org: "PoseKK"
 vpn_key_email: "test@gmail.com"
 vpn_key_ou: "posekk"
+vpn_user_list:
+  - "user1"
+  - "user2"
+  - "PoseKK"
+vpn_destination_key: "/tmp/"
