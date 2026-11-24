@@ -3,4 +3,4 @@ all:
     openvpn:
       hosts:
         srv-openvpn:
-          ansible_host: 179.237.117.189 
+          ansible_host: 179.237.117.234 
