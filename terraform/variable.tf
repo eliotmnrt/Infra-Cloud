@@ -45,3 +45,8 @@ variable "metadatas" {
     "environment" = "dev"
   }
 }
+
+variable "vpn_user_list" {
+  type    = list(string)
+  default = ["eliot", "user22"]
+}

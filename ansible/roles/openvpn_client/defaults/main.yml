@@ -1,3 +1,5 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # defaults file for roles/openvpn_client
+vpn_server_name: "info_vpn"
+vpn_destination_key: "/tmp/"
