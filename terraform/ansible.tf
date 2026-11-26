@@ -5,6 +5,7 @@ resource "null_resource" "openvpn_server" {
   }
   provisioner "local-exec" {
     command = <<-EOT
+      until nc -z -w 3 ${openstack_networking_floatingip_v2.floatingip_1.address} 22; do echo "attente SSH..."; sleep 5; done
       echo > /tmp/openvpn.ini;
       echo "[openvpn]" | tee -a /tmp/openvpn.ini;
       echo "srv-openvpn ansible_host=${openstack_networking_floatingip_v2.floatingip_1.address}" | tee -a /tmp/openvpn.ini;

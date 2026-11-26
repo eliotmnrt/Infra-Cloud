@@ -20,7 +20,7 @@ resource "openstack_compute_instance_v2" "openvpn" {
     name = var.network_internal_dev
   }
 
-  depends_on = [openstack_networking_subnet_v2.network_subnet]
+  depends_on = [module.network_dev]
 }
 
 # Associate the floating IP address with the OpenVPN instance.

@@ -1,7 +1,7 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for roles/openvpn_client
-- name: "Create client - {{ item }}"
+- name: "Create client"
   include_tasks: create_client.yml
   loop: 
     - "{{ vpn_user_list }}"
