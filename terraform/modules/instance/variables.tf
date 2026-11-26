@@ -39,3 +39,23 @@ variable "metadatas" {
 variable "instance_network_internal" {
   type    = string
 }
+
+variable "instance_count" {
+  type    = number
+  default = 1
+}
+
+variable "public_floating_ip" {
+  type    = bool
+  default = false
+}
+
+variable "public_floating_ip_fixed" {
+  type    = string
+  default = ""
+}
+
+variable "instance_internal_fixed_ip" {
+  type = string
+  default = ""
+}

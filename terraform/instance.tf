@@ -1,11 +1,14 @@
 module "openvpn" {
   source                         = "./modules/instance"
   instance_name                  = "openvpn"
+  instance_count                 = 1
   instance_keypair               = openstack_compute_keypair_v2.ssh_public_key.name
   instance_security_groups       = [openstack_networking_secgroup_v2.openvpn.name, openstack_networking_secgroup_v2.ssh.name, "default"]
   instance_network_internal      = var.network_internal_dev
   instance_network_external_name = var.network_external_name
   instance_network_external_id   = var.network_external_id
+  public_floating_ip             = true
+  
   metadatas                      = {
     environment = "dev"
   }
