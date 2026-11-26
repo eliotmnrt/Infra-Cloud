@@ -5,32 +5,32 @@ resource "null_resource" "openvpn_server" {
   }
   provisioner "local-exec" {
     command = <<-EOT
-      until nc -z -w 3 ${openstack_networking_floatingip_v2.floatingip_1.address} 22; do echo "attente SSH..."; sleep 5; done
+      until nc -z -w 3 ${module.openvpn.instance_external_ip} 22; do echo "attente SSH..."; sleep 5; done
       echo > /tmp/openvpn.ini;
       echo "[openvpn]" | tee -a /tmp/openvpn.ini;
-      echo "srv-openvpn ansible_host=${openstack_networking_floatingip_v2.floatingip_1.address}" | tee -a /tmp/openvpn.ini;
+      echo "srv-openvpn ansible_host=${module.openvpn.instance_external_ip}" | tee -a /tmp/openvpn.ini;
       ANSIBLE_CONFIG=../ansible/ansible.cfg ansible-playbook -u debian -i /tmp/openvpn.ini  ../ansible/playbook_openvpn_server.yml;
       rm -f /tmp/openvpn.ini;
     EOT
   }
-    depends_on = [openstack_compute_instance_v2.openvpn,openstack_networking_floatingip_v2.floatingip_1,openstack_compute_floatingip_associate_v2.fip_assoc]
+  depends_on = [module.openvpn, module.openvpn.instance_external_ip]
 }
 
 resource "null_resource" "create_new_vpn_client" {
   for_each = toset(var.vpn_user_list)
-    triggers = {
-      name = each.value
-      always_run = timestamp()
-    }
-  
+  triggers = {
+    name       = each.value
+    always_run = timestamp()
+  }
+
   provisioner "local-exec" {
     command = <<-EOT
       echo > /tmp/openvpn.ini;
       echo "[openvpn]" | tee -a /tmp/openvpn.ini;
-      echo "srv-openvpn ansible_host=${openstack_networking_floatingip_v2.floatingip_1.address}" | tee -a /tmp/openvpn.ini;
+      echo "srv-openvpn ansible_host=${module.openvpn.instance_external_ip}" | tee -a /tmp/openvpn.ini;
       ANSIBLE_CONFIG=../ansible/ansible.cfg ansible-playbook -u debian -i /tmp/openvpn.ini  -e vpn_user_list=${each.value} ../ansible/playbook_openvpn_client.yml;
       rm -f /tmp/openvpn.ini;
     EOT
   }
-  depends_on = [openstack_compute_instance_v2.openvpn,null_resource.openvpn_server,openstack_networking_floatingip_v2.floatingip_1,openstack_compute_floatingip_associate_v2.fip_assoc]
+  depends_on = [module.openvpn, null_resource.openvpn_server, module.openvpn.instance_external_ip]
 }
