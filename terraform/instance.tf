@@ -8,7 +8,8 @@ module "openvpn" {
   instance_network_external_name = var.network_external_name
   instance_network_external_id   = var.network_external_id
   public_floating_ip             = true
-  
+  instance_ssh_key               = var.ssh_public_key_default_user
+
   metadatas                      = {
     environment = "dev"
   }
